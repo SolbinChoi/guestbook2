@@ -1,4 +1,9 @@
-<% 
+<%@page import="java.util.List"%>
+<%@page import="kr.ac.sungkyul.guestbook.vo.GuestbookVo"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+	List<GuestbookVo> list 
+		= (List<GuestbookVo>)request.getAttribute( "list" );
 %>
 <html>
 <head>
@@ -6,7 +11,8 @@
 <title>방명록</title>
 </head>
 <body>
-	<form action="add.php" method="post">
+	<form action="/guestbook2/gb" method="post">
+	<input type="hidden" name="a" value="add">
 	<table border=1 width=500>
 		<tr>
 			<td>이름</td><td><input type="text" name="name"></td>
@@ -16,21 +22,31 @@
 			<td colspan=4><textarea name="content" cols=60 rows=5></textarea></td>
 		</tr>
 		<tr>
-			<td colspan=4 align=right><input type="submit" VALUE=" 확인 "></td>
+			<td colspan=4 align=right><input type="submit" value=" 확인 "></td>
 		</tr>
 	</table>
 	</form>
+	
+	<%
+	int count = list.size();
+	int index = 0;
+	for( GuestbookVo vo : list ) {
+	%>
 	<br>
 	<table width=510 border=1>
 		<tr>
-			<td>[1]</td>
-			<td>안대혁</td>
-			<td>2013-01-15</td>
-			<td><a href="deleteform.php?id=">삭제</a></td>
+			<td>[<%=count-index %>]</td>
+			<td><%=vo.getName()%></td>
+			<td><%=vo.getRegDate()%></td>
+			<td><a href="/guestbook2/gb?a=deleteform&no=<%=vo.getNo() %>">삭제</a></td>
 		</tr>
 		<tr>
-			<td colspan=4>안녕하세요</td>
+			<td colspan=4><%=vo.getContent().replaceAll("\n", "<br>") %></td>
 		</tr>
 	</table>
+	<%
+		index++;
+	}
+	%>
 </body>
 </html>
